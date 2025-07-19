@@ -61,6 +61,8 @@ function endGame() {
   isGamePlaying = false;
   startBtn.innerHTML = 'New Game';
   isButtonVisible = true;
+  timeRemaining = 60;
+  updateTimerOnScreen();
   if (intervalId) clearInterval(intervalId);
   updateScore(yourScore, select);
   if (wantTimerVal === 0) {
@@ -132,10 +134,11 @@ function createLights(value) {
   for (let i = 1; i <= value; i++) {
     lightHTML += `
       <div id=light${i}>
-      <button style="background-color: ${colors[i - 1]}" disabled=${isGamePlaying ? false : true }></button>
+      <button style="background-color: ${colors[i - 1]};" disabled=${isGamePlaying ? false : true }></button>
       </div>`;
   }
   lightContainer.innerHTML = lightHTML;
+  lightContainer.style.pointerEvents = 'none';
   generateRandomIds(value);
   checkDevice();
   handleClick(value);
@@ -164,7 +167,7 @@ function proceedOnClick(event) {
       yourScore += 50;
       generateRandomIds(select.value);
       switchOnLight();
-    } else if (event.target.id !== randomId) {
+    } else if (event.target.id !== randomId && [...lightContainer.children].some((child) => child.id === event.target.id)) {
       yourScore -= 100;
       if (yourScore < 0) {
         yourScore = 0;
@@ -225,6 +228,7 @@ function switchOffLight() {
 function showLights() {
   if (isGamePlaying) {
     const lights = lightContainer.children;
+    lightContainer.style.pointerEvents = 'auto';
     [...lights].forEach((light) => {
       light.style.transform = 'scale(1)';
     });
@@ -255,53 +259,58 @@ function buttonBehaviour() {
     updateTimerOnScreen();
   }
   if (isButtonVisible && !isGamePlaying){
-    startBtn.addEventListener('click', function() {
-      startBtn.style.transform = 'scale(0)';
-      countdownSpan.innerHTML = '';
-      countdownSpan.style.transform = 'scale(1)';
-      isButtonVisible = false;
-      isGamePlaying = true;
-      yourScore = 0;
-      createdScore.style.opacity = 0;
-      updateScore(yourScore, select);
-        async function countdown() {
-          if (wantTimerVal === 1) {
-            for(let i = 4; i > 0; i--) {
-              await new Promise((resolve, reject) => {
-                clearTimeout(timeoutId1);
-                timeoutId1 = setTimeout(function() {
-                  if (i > 1) {
-                    countdownSpan.innerHTML = i-1;
-                  } else {
-                    countdownSpan.innerHTML = 'GO';
-                    isGameStarted = true;
-                    onTimerRunning();
-                    checkIfClickingStopped();
-                    async function vanishGoText() {
-                      await new Promise((resolve, reject) => {
-                        clearTimeout(timeoutId2);
-                        timeoutId2 = setTimeout(function() {
-                          countdownSpan.style.transform = 'scale(0)';
-                          showLights();
-                          resolve();
-                        }, 500);
-                      })
-                    }
-                    vanishGoText();
-                  }
-                  resolve();
-                }, 1000);
-              })
-            }
-          } else {
-            isGameStarted = true;
-            onTimerRunning();
-            checkIfClickingStopped();
-            showLights();
-          }
-        };
-      countdown();
-    });
+    startBtn.removeEventListener('click', handleButtonClick);
+    startBtn.addEventListener('click', handleButtonClick);
   }
+}
+
+function handleButtonClick() {
+  if (timeoutId1) clearTimeout(timeoutId1);
+  if (timeoutId2) clearTimeout(timeoutId2);
+  startBtn.style.transform = 'scale(0)';
+  countdownSpan.innerHTML = '';
+  countdownSpan.style.transform = 'scale(1)';
+  isButtonVisible = false;
+  isGamePlaying = true;
+  yourScore = 0;
+  createdScore.style.opacity = 0;
+  updateScore(yourScore, select);
+    async function countdown() {
+      if (wantTimerVal === 1) {
+        for(let i = 4; i > 0; i--) {
+          await new Promise((resolve, reject) => {
+            clearTimeout(timeoutId1);
+            timeoutId1 = setTimeout(function() {
+              if (i > 1) {
+                countdownSpan.innerHTML = i-1;
+              } else {
+                countdownSpan.innerHTML = 'GO';
+                isGameStarted = true;
+                onTimerRunning();
+                checkIfClickingStopped();
+                async function vanishGoText() {
+                  await new Promise((resolve, reject) => {
+                    clearTimeout(timeoutId2);
+                    timeoutId2 = setTimeout(function() {
+                      countdownSpan.style.transform = 'scale(0)';
+                      showLights();
+                      resolve();
+                    }, 500);
+                  })
+                }
+                vanishGoText();
+              }
+              resolve();
+            }, 1000);
+          })
+        }
+      } else {
+        isGameStarted = true;
+        onTimerRunning();
+        checkIfClickingStopped();
+        showLights();
+      }
+    };
+  countdown();
 }
 

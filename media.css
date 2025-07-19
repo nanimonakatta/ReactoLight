@@ -3,7 +3,7 @@
     gap: 1rem;
   }
 }
-@media (max-width: 1300px) and (orientation: landscape) {
+@media (max-width: 950px) and (orientation: landscape) {
   .countdown {
     font-size: clamp(1.5rem, calc(1.5rem + 1vw), 2rem);
   }
