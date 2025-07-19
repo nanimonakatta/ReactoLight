@@ -3,18 +3,29 @@
     gap: 1rem;
   }
 }
-@media (max-width: 500px) {
-  footer {
-    height: 15vh;
-  }
-}
-@media (min-width: 501px) {
-  footer {
-    height: 20vh;
-  }
-}
 @media (max-width: 1300px) and (orientation: landscape) {
-  footer {
-    height: 20vh;
+  .countdown {
+    font-size: clamp(1.5rem, calc(1.5rem + 1vw), 2rem);
+  }
+  footer section {
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+  .time-remaining {
+    margin: 0;
+    width: 20px;
+    height: 20px;
+    font-size: clamp(0.7rem, calc(1vw + 0.6rem), 0.8rem);
+  }
+  footer section h2 {
+    font-size: clamp(0.7rem, calc(0.7rem + 1vw), 0.9rem);
+  }
+  footer section p {
+    font-size: clamp(0.7rem, calc(0.7rem + 1vw), 0.9rem);
+  }
+  .timer-need {
+    margin: 0;
   }
 }

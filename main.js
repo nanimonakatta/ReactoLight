@@ -61,6 +61,7 @@ function endGame() {
   isGamePlaying = false;
   startBtn.innerHTML = 'New Game';
   isButtonVisible = true;
+  if (intervalId) clearInterval(intervalId);
   updateScore(yourScore, select);
   if (wantTimerVal === 0) {
     clearTimeout(timeoutId5);
