@@ -98,9 +98,6 @@ function endOnStop() {
   isGameStarted = false;
   switchOffLight();
   resetDisplay();
-  if (timeRemaining > 0) {
-    timeRemaining = 60;
-  }
   updateTimerOnScreen();
 }
 
