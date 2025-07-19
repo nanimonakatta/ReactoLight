@@ -9,6 +9,23 @@ const createdScore = document.querySelector('.created-score');
 const timeRemainingSpan = document.querySelector('.time-remaining');
 const wantTimer = document.querySelectorAll('.timer-need input');
 const colors = ['#f5c280', '#eeec79', '#64ed98', '#63deed', '#b8a67a', '#ad7ab8', '#7a89b8', '#f18d8b'];
+const audios = [
+  new Audio('./assets/B.mp3'), 
+  new Audio('./assets/C.mp3'),
+  new Audio('./assets/F.mp3'),
+  new Audio('./assets/E.mp3'),
+  new Audio('./assets/B.mp3'),
+  new Audio('./assets/C.mp3'),
+  new Audio('./assets/E.mp3'),
+  new Audio('./assets/D.mp3'),
+  new Audio('./assets/B.mp3'),
+  new Audio('./assets/C.mp3'),
+  new Audio('./assets/F.mp3'),
+  new Audio('./assets/E.mp3'),
+  new Audio('./assets/D.mp3'),
+  new Audio('./assets/C.mp3'),
+  new Audio('./assets/extra.mp3')
+];
 let isButtonVisible = true;
 let isGamePlaying = false;
 let isGameStarted = false;
@@ -21,6 +38,7 @@ let randomId = '';
 let yourScore = 0;
 let timeRemaining = 60;
 let wantTimerVal = 1; // 1 for 'yes' 0 for 'no'
+let audioNumberToPlay = 0;
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -74,6 +92,7 @@ function endGame() {
     startBtn.style.transform = 'scale(1)';
   }
   hideLights();
+  audioNumberToPlay = 0;
 }
 
 
@@ -125,6 +144,7 @@ function resetDisplay() {
   }
   timeRemaining = 60;
   updateScore(yourScore, select);
+  audioNumberToPlay = 0;
 }
 
 
@@ -167,8 +187,12 @@ function proceedOnClick(event) {
       yourScore += 50;
       generateRandomIds(select.value);
       switchOnLight();
+      playSound();
     } else if (event.target.id !== randomId && [...lightContainer.children].some((child) => child.id === event.target.id)) {
       yourScore -= 100;
+      const wrong = new Audio('./assets/wrong.mp3');
+      wrong.currentTime = 0.05;
+      wrong.play();
       if (yourScore < 0) {
         yourScore = 0;
         endGame();
@@ -314,3 +338,15 @@ function handleButtonClick() {
   countdown();
 }
 
+
+// CORRECT__SOUND__PLAYING
+function playSound() {
+  if (audioNumberToPlay >= audios.length) {
+    audioNumberToPlay = 0;
+  }
+  if (audios[audioNumberToPlay]) {
+    audios[audioNumberToPlay].currentTime = 0;
+    audios[audioNumberToPlay].play();
+  }
+  audioNumberToPlay++;
+}
