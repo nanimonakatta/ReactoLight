@@ -1,0 +1,20 @@
+@media (max-width: 400px) {
+  .light-container {
+    gap: 1rem;
+  }
+}
+@media (max-width: 500px) {
+  footer {
+    height: 15vh;
+  }
+}
+@media (min-width: 501px) {
+  footer {
+    height: 20vh;
+  }
+}
+@media (max-width: 1300px) and (orientation: landscape) {
+  footer {
+    height: 20vh;
+  }
+}

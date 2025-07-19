@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReactoLight</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="media.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="main">
+    <header>
+      <h1>ReactoLight</h1>
+      <div class="select-container">
+        <select name="select" id="select" aria-label="select-difficulty">
+          <option value="" disabled>Lights</option>
+          <option value="2" selected>2 Lights</option>
+          <option value="4">4 Lights</option>
+          <option value="6">6 Ligths</option>
+          <option value="8">8 Lights</option>
+        </select>
+      </div>
+    </header>
+    <main>
+      <span class="countdown"></span>
+      <button class="start-btn">
+        <span class="created-score">0</span>
+        Start
+      </button>
+      <div class="light-container">
+      </div>
+    </main>
+    <footer>
+      <section>
+        <span class="time-remaining">0</span>
+        <h2>Your score: <span class="score"></span></h2> 
+        <p>Your high score: <span class="high-score"></span> </p>
+          <section class="timer-need" for="timer">
+            <span>Want timer:</span>
+            <label for="yes"><input type="radio" name="timer" id="yes" value="1" checked>Yes</label> 
+            <label for="no"><input type="radio" name="timer" id="no" value="0">No</label> 
+          </section>
+      </section>
+    </footer>
+  </div>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
