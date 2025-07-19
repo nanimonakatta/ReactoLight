@@ -1,6 +1,8 @@
 # ReactoLight
 A basic work, where when you start the game a number of lights(as selected) comes on screen and any one of them is switched on. When you click on it it will suddenly go off and another one will be on. You can check your score in 1 minute.
 
+**NOTE: NOT CLICKING ANY LIGHT TILL 5 SECONDS WILL RESTART THE GAME. WITH SCORE ZERO EVEN IF YOU HAVE SOME SCORE. IT MEANS ONCE THE GAME BEGINS YOU NEED TO PLAY UNTIL THE TIME RUNS OUT.**
+
 # 🔦 Light Reaction Game
 
 Here players must quickly click on randomly lit buttons (lights) to score points before time runs out. This project is responsive and adapts to different devices and orientations.
