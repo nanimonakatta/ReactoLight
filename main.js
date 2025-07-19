@@ -93,8 +93,9 @@ function checkIfClickingStopped() {
   }
 }
 function endOnStop() {
-  clearInterval(intervalId);
+  if (intervalId) clearInterval(intervalId);
   isGamePlaying = false;
+  isGameStarted = false;
   switchOffLight();
   resetDisplay();
   if (timeRemaining > 0) {
@@ -107,6 +108,7 @@ function endOnStop() {
 // RELOADS__THE__PAGE__ON__SELECTING__LEVEL/LIGHTS__AND__WHEN__GAME__ENDS__SECTION
 function selectNoOfLights() {
   select.addEventListener('change', function() {
+    if (intervalId) clearInterval(intervalId);
     resetDisplay();
   });
 }
@@ -121,6 +123,7 @@ function resetDisplay() {
   if (timeRemaining > 0) {
     yourScore = 0;
   }
+  timeRemaining = 60;
   updateScore(yourScore, select);
 }
 
