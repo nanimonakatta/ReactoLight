@@ -56,7 +56,7 @@ function storeHighScore() {
 
 function updatHighScore(highScore, select) {
   const value = parseInt(select.value);
-  const storedHighScore = JSON.parse(localStorage.getItem('HIGH_SCORE'));
+  let storedHighScore = JSON.parse(localStorage.getItem('HIGH_SCORE'));
 
   if (!storedHighScore) {
     storedHighScore = [
