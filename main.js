@@ -22,17 +22,20 @@ let yourScore = 0;
 let timeRemaining = 60;
 let wantTimerVal = 1; // 1 for 'yes' 0 for 'no'
 
-selectNoOfLights();
-createLights(select.value);
-switchOnLight();
-updateScore(yourScore, select);
-updateTimerOnScreen();
-wantTimerFun();
 
-mobileQuery.addEventListener('change', debouncedCheckDevice);
-fromtabQuery.addEventListener('change', debouncedCheckDevice);
-desktopQuery.addEventListener('change', debouncedCheckDevice);
-landscapeQuery.addEventListener('change', debouncedCheckDevice);
+document.addEventListener('DOMContentLoaded', function() {
+  selectNoOfLights();
+  createLights(select.value);
+  switchOnLight();
+  updateScore(yourScore, select);
+  updateTimerOnScreen();
+  wantTimerFun();
+
+  mobileQuery.addEventListener('change', debouncedCheckDevice);
+  fromtabQuery.addEventListener('change', debouncedCheckDevice);
+  desktopQuery.addEventListener('change', debouncedCheckDevice);
+  landscapeQuery.addEventListener('change', debouncedCheckDevice);
+});
 
 
 
