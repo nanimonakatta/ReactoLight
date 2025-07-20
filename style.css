@@ -10,6 +10,7 @@
 html, body {
   width: 100%;
   width: 100%;
+  font-family: "Oswald", sans-serif;
 }
 .main {
   min-height: 100svh;
@@ -38,7 +39,7 @@ details {
 }
 .right-header {
   padding: 0.25rem;
-  width: max(15vw, 75px);
+  width: max(15vw, 85px);
   position: absolute;
   right: 10%;
   top: 150%;
@@ -52,7 +53,6 @@ details {
 select {
   padding: 0.25rem 0.5rem;
   width: 100%;
-  font-family: "Oswald", sans-serif;
   cursor: pointer;
   border: none;
   outline: none;

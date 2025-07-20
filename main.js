@@ -43,13 +43,13 @@ let yourScore = 0;
 let timeRemaining = 0;
 let wantTimerVal = 1; // 1 for 'yes' 0 for 'no'
 let audioNumberToPlay = 0;
+let timeVal = 15;
 
 
 document.addEventListener('DOMContentLoaded', function() {
   selectNoOfLights();
   createLights(select.value);
   switchOnLight();
-  updateScore(yourScore, select);
   updateTimerOnScreen();
   wantTimerFun();
   chnageSummaryIcon();
@@ -90,7 +90,7 @@ function endGame() {
   assignTime();
   updateTimerOnScreen();
   if (intervalId) clearInterval(intervalId);
-  updateScore(yourScore, select);
+  updateScore(yourScore, select, timeVal);
   if (wantTimerVal === 0) {
     clearTimeout(timeoutId5);
     setTimeout(function() {
@@ -123,7 +123,6 @@ function checkIfClickingStopped() {
   }
 }
 function endOnStop() {
-  if (intervalId) clearInterval(intervalId);
   isGamePlaying = false;
   isGameStarted = false;
   switchOffLight();
@@ -134,7 +133,7 @@ function endOnStop() {
 
 
 function assignTime() {
-  let timeVal = 0;
+  timeVal = 0;
   detailsInp.forEach((input) => {
     if (input.hasAttribute('checked')) {
       timeVal = parseInt(input.value);
@@ -142,6 +141,7 @@ function assignTime() {
   })
   timeRemaining = timeVal;
   updateTimerOnScreen();
+  updateScore(yourScore, select, timeVal);
 }
 function changeToSelectedTime(input) {
   detailsInp.forEach((inp) => {
@@ -149,30 +149,36 @@ function changeToSelectedTime(input) {
   })
   input.setAttribute('checked', true);
   if (intervalId) {
-    clearInterval(intervalId);
     resetDisplay();
   }
   assignTime();
+  yourScore = 0;
+  updateScore(yourScore, select, timeVal);
+  hideDetailsElement();
 }
 
 
 // RELOADS__THE__PAGE__ON__SELECTING__LEVEL/LIGHTS__AND__WHEN__GAME__ENDS__SECTION
 function selectNoOfLights() {
   select.addEventListener('change', function() {
-    if (intervalId) clearInterval(intervalId);
     resetDisplay();
   });
 }
 function resetDisplay() {
+  if (intervalId) clearInterval(intervalId);
   clearTimeout(timeoutId1);
   clearTimeout(timeoutId2);
-  countdownSpan.innerHTML = '';
+  clearTimeout(timeoutId3);
+  clearTimeout(timeoutId4);
+  clearTimeout(timeoutId5);
   const noOfLights = parseInt(select.value);
+  countdownSpan.innerHTML = '';
   generateRandomIds(noOfLights);
   createLights(noOfLights);
   switchOnLight();
-  assignTime();
-  updateScore(yourScore, select);
+  hideLights();
+  yourScore = 0;
+  updateScore(yourScore, select, timeVal);
   audioNumberToPlay = 0;
 }
 
@@ -227,16 +233,18 @@ function proceedOnClick(event) {
         return;
       }
     }
-    updateScore(yourScore, select);
+    updateScore(yourScore, select, timeVal);
     checkIfClickingStopped();
   }
 }
 
 
 // IT__HELPS__TO__KNOW__WHETHER__THE__LIGHT__IS__CLICKED__OR__NOT
+let timeoutId6;
 function showItsClicked(button) {
   button.classList.add('active');
-  setTimeout(function() {
+  clearTimeout(timeoutId6);
+  timeoutId6 = setTimeout(function() {
     button.classList.remove('active');
   }, 100);
 }
@@ -299,8 +307,12 @@ function hideLights() {
 // START__BUTTON__BEHAVIOUR__SECTION
 function buttonBehaviour() {
   if (!isButtonVisible) {
+    if (intervalId) clearInterval(intervalId);
+
+    if (timeoutId1) clearTimeout(timeoutId1);
+    if (timeoutId2) clearTimeout(timeoutId2);
+    if(timeoutId4) clearTimeout(timeoutId4);
     startBtn.style.transform = 'scale(1)';
-    clearTimeout(timeoutId4);
     if (yourScore !== 0) {
       createdScore.innerHTML = yourScore;
       timeoutId4 = setTimeout(function() {
@@ -309,6 +321,7 @@ function buttonBehaviour() {
     }
     assignTime();
     updateTimerOnScreen();
+    hideLights();
   }
   if (isButtonVisible && !isGamePlaying){
     startBtn.removeEventListener('click', handleButtonClick);
@@ -317,6 +330,9 @@ function buttonBehaviour() {
 }
 
 function handleButtonClick() {
+  if (intervalId) {
+    resetDisplay();
+  };
   if (timeoutId1) clearTimeout(timeoutId1);
   if (timeoutId2) clearTimeout(timeoutId2);
   startBtn.style.transform = 'scale(0)';
@@ -326,43 +342,49 @@ function handleButtonClick() {
   isGamePlaying = true;
   yourScore = 0;
   createdScore.style.opacity = 0;
-  updateScore(yourScore, select);
-    async function countdown() {
-      if (wantTimerVal === 1) {
-        for(let i = 4; i > 0; i--) {
-          await new Promise((resolve, reject) => {
-            clearTimeout(timeoutId1);
-            timeoutId1 = setTimeout(function() {
-              if (i > 1) {
-                countdownSpan.innerHTML = i-1;
-              } else {
-                countdownSpan.innerHTML = 'GO';
-                isGameStarted = true;
-                onTimerRunning();
-                checkIfClickingStopped();
-                async function vanishGoText() {
-                  await new Promise((resolve, reject) => {
-                    clearTimeout(timeoutId2);
-                    timeoutId2 = setTimeout(function() {
-                      countdownSpan.style.transform = 'scale(0)';
-                      showLights();
-                      resolve();
-                    }, 500);
-                  })
-                }
-                vanishGoText();
+  updateScore(yourScore, select, timeVal);
+  assignTime();
+
+  async function countdown() {
+    if (wantTimerVal === 1) {
+      for(let i = 4; i > 0; i--) {
+        await new Promise((resolve, reject) => {
+          clearTimeout(timeoutId1);
+          timeoutId1 = setTimeout(function() {
+            if (i > 1) {
+              countdownSpan.innerHTML = i-1;
+            } else {
+              countdownSpan.innerHTML = 'GO';
+              isGameStarted = true;
+              onTimerRunning();
+              checkIfClickingStopped();
+              async function vanishGoText() {
+                await new Promise((resolve, reject) => {
+                  clearTimeout(timeoutId2);
+                  timeoutId2 = setTimeout(function() {
+                    countdownSpan.style.transform = 'scale(0)';
+                    showLights();
+                    resolve();
+                  }, 500);
+                })
               }
-              resolve();
-            }, 1000);
-          })
-        }
-      } else {
-        isGameStarted = true;
-        onTimerRunning();
-        checkIfClickingStopped();
-        showLights();
+              vanishGoText();
+            }
+            resolve();
+          }, 1000);
+        })
       }
-    };
+    } else {
+      isGameStarted = true;
+      onTimerRunning();
+      checkIfClickingStopped();
+      clearTimeout(timeoutId2);
+      timeoutId2 = setTimeout(function() {
+        countdownSpan.style.transform = 'scale(0)';
+        showLights();
+      }, 500);
+    }
+  };
   countdown();
 }
 

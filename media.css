@@ -4,12 +4,16 @@
   }
 }
 @media (max-width: 950px) and (orientation: landscape) {
+  .right-header {
+    width: max(50vh, 50vw);
+  }
   .countdown {
     font-size: clamp(1.5rem, calc(1.5rem + 1vw), 2rem);
   }
   footer section {
+    padding: 0 0.25rem;
     flex-direction: row;
-    gap: 1rem;
+    gap: min(1rem, 2vw);
     justify-content: center;
     align-items: center;
   }
