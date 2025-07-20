@@ -87,20 +87,21 @@ function endGame() {
   isGamePlaying = false;
   startBtn.innerHTML = 'New Game';
   isButtonVisible = true;
-  assignTime();
   updateTimerOnScreen();
   if (intervalId) clearInterval(intervalId);
   updateScore(yourScore, select, timeVal);
   if (wantTimerVal === 0) {
     clearTimeout(timeoutId5);
-    setTimeout(function() {
+    timeoutId5 = setTimeout(function() {
       startBtn.style.transform = 'scale(1)';
     }, 500);
   } else {
     startBtn.style.transform = 'scale(1)';
   }
   hideLights();
+  assignTime();
   audioNumberToPlay = 0;
+  resetDisplay();
 }
 
 
