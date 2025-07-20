@@ -15,20 +15,44 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
   <link rel="icon" href="data:,">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
 </head>
 <body>
   <div class="main">
     <header>
       <h1>ReactoLight</h1>
-      <div class="select-container">
-        <select name="select" id="select" aria-label="select-difficulty">
-          <option value="" disabled>Lights</option>
-          <option value="2" selected>2 Lights</option>
-          <option value="4">4 Lights</option>
-          <option value="6">6 Ligths</option>
-          <option value="8">8 Lights</option>
-        </select>
-      </div>
+        <details>
+          <summary><i class="ri-menu-line"></i></summary>
+          <div class="right-header">
+            <div class="select-container">
+              <select name="select" id="select" aria-label="select-difficulty">
+                <option value="" disabled>Lights</option>
+                <option value="2" selected>2 Lights</option>
+                <option value="4">4 Lights</option>
+                <option value="6">6 Ligths</option>
+                <option value="8">8 Lights</option>
+              </select>
+            </div>
+            <div class="details-content">
+              <label>
+                <input type="radio" id="inp10" name="option" value="15" checked>
+                15s 
+              </label>
+              <label>
+                <input type="radio" id="inp30" name="option" value="30">
+                30s 
+              </label>
+              <label>
+                <input type="radio" id="inp45" name="option" value="45">
+                45s 
+              </label>
+              <label>
+                <input type="radio" id="inp60" name="option" value="60">
+                60s 
+              </label>
+            </div>
+          </div>
+        </details>
     </header>
     <main>
       <span class="countdown"></span>

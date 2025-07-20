@@ -3,11 +3,14 @@ import debouncedCheckDevice, {checkDevice, mobileQuery, desktopQuery, landscapeQ
 
 const lightContainer = document.querySelector('.light-container');
 const select = document.querySelector('select'); 
+const detailsInp =document.querySelectorAll('.details-content input');
 const startBtn = document.querySelector('.start-btn'); 
 const countdownSpan = document.querySelector('.countdown');
 const createdScore = document.querySelector('.created-score');
 const timeRemainingSpan = document.querySelector('.time-remaining');
 const wantTimer = document.querySelectorAll('.timer-need input');
+const details = document.querySelector('details');
+const summary = document.querySelector('summary');
 const colors = ['#f5c280', '#eeec79', '#64ed98', '#63deed', '#b8a67a', '#ad7ab8', '#7a89b8', '#f18d8b'];
 const audios = [
   new Audio('./assets/B.mp3'), 
@@ -26,6 +29,7 @@ const audios = [
   new Audio('./assets/C.mp3'),
   new Audio('./assets/extra.mp3')
 ];
+const wrong = new Audio('./assets/wrong.mp3');
 let isButtonVisible = true;
 let isGamePlaying = false;
 let isGameStarted = false;
@@ -36,7 +40,7 @@ let timeoutId4;
 let intervalId;
 let randomId = '';
 let yourScore = 0;
-let timeRemaining = 60;
+let timeRemaining = 0;
 let wantTimerVal = 1; // 1 for 'yes' 0 for 'no'
 let audioNumberToPlay = 0;
 
@@ -48,13 +52,17 @@ document.addEventListener('DOMContentLoaded', function() {
   updateScore(yourScore, select);
   updateTimerOnScreen();
   wantTimerFun();
+  chnageSummaryIcon();
+  assignTime();
 
   mobileQuery.addEventListener('change', debouncedCheckDevice);
   fromtabQuery.addEventListener('change', debouncedCheckDevice);
   desktopQuery.addEventListener('change', debouncedCheckDevice);
   landscapeQuery.addEventListener('change', debouncedCheckDevice);
+  document.body.querySelector('main').addEventListener('click', hideDetailsElement);
+  document.body.querySelector('footer').addEventListener('click', hideDetailsElement);
+  detailsInp.forEach((input) => input.addEventListener('click', () => changeToSelectedTime(input)));
 });
-
 
 
 // THE__TIMER__WHICH__OCCURS__WHEN__YOU__CLICK__START__GAME__BUTTON
@@ -79,7 +87,7 @@ function endGame() {
   isGamePlaying = false;
   startBtn.innerHTML = 'New Game';
   isButtonVisible = true;
-  timeRemaining = 60;
+  assignTime();
   updateTimerOnScreen();
   if (intervalId) clearInterval(intervalId);
   updateScore(yourScore, select);
@@ -124,6 +132,30 @@ function endOnStop() {
 }
 
 
+
+function assignTime() {
+  let timeVal = 0;
+  detailsInp.forEach((input) => {
+    if (input.hasAttribute('checked')) {
+      timeVal = parseInt(input.value);
+    }
+  })
+  timeRemaining = timeVal;
+  updateTimerOnScreen();
+}
+function changeToSelectedTime(input) {
+  detailsInp.forEach((inp) => {
+    inp.removeAttribute('checked');
+  })
+  input.setAttribute('checked', true);
+  if (intervalId) {
+    clearInterval(intervalId);
+    resetDisplay();
+  }
+  assignTime();
+}
+
+
 // RELOADS__THE__PAGE__ON__SELECTING__LEVEL/LIGHTS__AND__WHEN__GAME__ENDS__SECTION
 function selectNoOfLights() {
   select.addEventListener('change', function() {
@@ -139,10 +171,7 @@ function resetDisplay() {
   generateRandomIds(noOfLights);
   createLights(noOfLights);
   switchOnLight();
-  if (timeRemaining > 0) {
-    yourScore = 0;
-  }
-  timeRemaining = 60;
+  assignTime();
   updateScore(yourScore, select);
   audioNumberToPlay = 0;
 }
@@ -189,10 +218,9 @@ function proceedOnClick(event) {
       switchOnLight();
       playSound();
     } else if (event.target.id !== randomId && [...lightContainer.children].some((child) => child.id === event.target.id)) {
-      yourScore -= 100;
-      const wrong = new Audio('./assets/wrong.mp3');
       wrong.currentTime = 0.05;
       wrong.play();
+      yourScore -= 100;
       if (yourScore < 0) {
         yourScore = 0;
         endGame();
@@ -273,13 +301,13 @@ function buttonBehaviour() {
   if (!isButtonVisible) {
     startBtn.style.transform = 'scale(1)';
     clearTimeout(timeoutId4);
-    if (timeRemaining <= 0 && yourScore !== 0) {
+    if (yourScore !== 0) {
       createdScore.innerHTML = yourScore;
       timeoutId4 = setTimeout(function() {
         createdScore.style.opacity = 1;
       }, 700);
     }
-    timeRemaining = 60;
+    assignTime();
     updateTimerOnScreen();
   }
   if (isButtonVisible && !isGamePlaying){
@@ -349,4 +377,21 @@ function playSound() {
     audios[audioNumberToPlay].play();
   }
   audioNumberToPlay++;
+}
+
+
+// DETAILS__SECTION
+function hideDetailsElement() {
+  details.hasAttribute('open') && details.removeAttribute('open')
+}
+function chnageSummaryIcon() {
+  details.addEventListener('toggle', function() {
+    if (details.hasAttribute('open')) {
+      summary.innerHTML = '<i class="ri-close-large-fill"></i>'; 
+      summary.style.color = 'red';
+    } else {
+      summary.innerHTML = '<i class="ri-menu-line"></i>';
+      summary.style.color = 'whitesmoke';
+    }
+  });
 }

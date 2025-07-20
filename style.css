@@ -4,7 +4,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Oswald", sans-serif;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -29,20 +28,65 @@ header {
 header h1 {
   font-size: clamp(1rem, 1rem + 1.5vw, 3rem);
 }
-select {
+summary {
+  cursor: pointer;
+  list-style: none;
+}
+details {
+  position: relative;
+  font-family: "Oswald", sans-serif;
+}
+.right-header {
+  padding: 0.25rem;
   width: max(15vw, 75px);
+  position: absolute;
+  right: 10%;
+  top: 150%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: hsl(0, 0%, 16%);
+  border-radius: 5px;
+  z-index: 100;
+}
+select {
   padding: 0.25rem 0.5rem;
+  width: 100%;
+  font-family: "Oswald", sans-serif;
   cursor: pointer;
   border: none;
   outline: none;
   color: white;
   background-color: rgb(66, 66, 66);
+  border-radius: 5px;
+}
+select:open {
+  border-radius: 5px 5px 0 0;
+}
+.details-content {
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  background-color: hsl(0, 0%, 30%);
+  border-radius: 5px;
+}
+.details-content label {
+  display: flex;
+  gap: 0.25rem;
+  cursor: pointer;
+}
+.details-content input {
+  cursor: pointer;
 }
 main {
   flex: 8;
   position: relative;
   display: flex;
   justify-content: center;
+  font-family: "Oswald", sans-serif;
 }
 main > button {
   padding: 0.25rem 1.5rem;
